@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一平米静音站｜校园微型安静角 · 概念规划工具 · 作品编号 400593</title>
+<style>
+:root{--bg:#eee9df;--paper:#faf8f1;--ink:#292d2a;--muted:#74796f;--line:#cfcfc1;--sage:#637e69;--terra:#bd7256;--yellow:#d9b55e;--blue:#74929a;--ok:#4f7355;--warn:#a8802f;--bad:#a8513d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Segoe UI","Microsoft YaHei",sans-serif}
+.wrap{max-width:1240px;margin:auto;padding:0 22px}
+.top{height:62px;display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px}
+.brand{color:var(--sage);font-weight:800;letter-spacing:.14em;text-decoration:none}
+.top .right{display:flex;align-items:center;gap:14px}
+.back{color:var(--muted);text-decoration:none}
+.btn{font:13px/1 inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer}
+.btn:hover{border-color:var(--sage)}
+.btn.primary{background:var(--sage);border-color:var(--sage);color:#f6f7f1}
+.btn.mini{padding:6px 9px;font-size:12px}
+.btn:disabled{opacity:.42;cursor:not-allowed}
+:focus-visible{outline:2.5px solid var(--terra);outline-offset:2px}
+.hero{padding:26px 0 16px}
+.k{font:10px ui-monospace,monospace;color:var(--sage);letter-spacing:.16em}
+h1{font-size:clamp(29px,4.3vw,46px);line-height:1.08;margin:8px 0 8px}
+.hero p{color:var(--muted);max-width:780px;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.chip2{font:10px ui-monospace,monospace;color:var(--sage);border:1px solid var(--line);background:var(--paper);border-radius:99px;padding:4px 10px}
+.layout{display:grid;grid-template-columns:1fr 348px;gap:14px;padding:12px 0 40px}
+.board,.tools{border:1px solid var(--line);background:var(--paper);border-radius:15px;overflow:hidden}
+.head{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:12.5px}
+.status{font:10px ui-monospace,monospace;color:var(--sage)}
+.roomwrap{padding:18px 16px 12px}
+.roomlabel{display:flex;justify-content:space-between;color:var(--muted);font-size:10.5px;margin-bottom:9px}
+.room{position:relative;width:min(100%,520px);aspect-ratio:5/6;margin:0 auto;background:#e9eadd;border:9px solid #6f7f6a;border-radius:3px;box-shadow:0 2px 14px #00000014}
+.cells{position:absolute;inset:0;display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(12,1fr)}
+.cell{border:1px solid #ffffff8c;background:transparent;padding:0;cursor:pointer;font:inherit}
+.cell.alt{background:#e3e7d8}
+.cell.lane{box-shadow:inset 0 0 0 1px #8fb08f}
+.cell.door{background:#f2dda8;box-shadow:inset 0 0 0 1px #a98b45}
+.cell.has{background:#0000000d}
+.cell.route::after{content:"";display:block;width:26%;height:26%;margin:auto;border-radius:50%;background:#3f6ea8}
+.cell.sel{box-shadow:inset 0 0 0 2px var(--terra)}
+.cell.over{box-shadow:inset 0 0 0 2px var(--sage)}
+.shapes{position:absolute;inset:0;pointer-events:none}
+.shape{position:absolute}
+.shape svg{width:100%;height:100%;display:block}
+.shape.on{box-shadow:0 0 0 2px var(--terra)}
+.shape .tag{display:none}
+.shape.on .tag{display:block;position:absolute;left:2px;top:2px;background:#fdfcf6ee;border:1px solid var(--line);border-radius:4px;padding:0 4px;font-size:9px;color:#3c443d;white-space:nowrap}
+.turn{position:absolute;border:2px dashed #4f7fa8;border-radius:50%;display:grid;place-items:center;color:#3c6c93;font-size:9px;letter-spacing:.04em;pointer-events:none}
+.turn[hidden]{display:none}
+.north{position:absolute;right:6px;top:6px;width:22px;height:22px;pointer-events:none}
+.mark{position:absolute;font:9.5px/1.2 ui-monospace,monospace;color:#5c685d;background:#fdfcf6d9;border:1px solid #ffffffb0;border-radius:4px;padding:1px 4px;white-space:nowrap;pointer-events:none}
+.dimline{position:absolute;height:0;border-top:1px solid #6b7568;pointer-events:none}
+.dimline span{position:absolute;left:50%;top:-7px;transform:translateX(-50%);background:#fdfcf6dd;padding:0 4px;font:8.5px ui-monospace,monospace;color:#5c685d;white-space:nowrap}
+.dimline.v{width:0;height:auto;border-top:0;border-left:1px solid #6b7568}
+.dimline.v span{left:-6px;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:center}
+.scalebar{position:absolute;right:5%;bottom:8%;width:20%;height:9px;display:flex;border:1px solid #6b7568;pointer-events:none}
+.scalebar i{flex:1;height:100%}
+.scalebar i:nth-child(odd){background:#5c685d}
+.scalebar i:nth-child(even){background:#fdfcf6}
+.scalebar b{position:absolute;top:10px;font:8.5px ui-monospace,monospace;color:#5c685d;font-weight:400}
+.dimensions{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:10px;color:var(--muted);font:10px ui-monospace,monospace}
+.details{padding:0 16px 12px;color:var(--muted);font-size:11.5px}
+.legend{display:flex;flex-wrap:wrap;gap:5px 12px;padding:0 16px 15px;border-top:1px solid var(--line);margin-top:4px;padding-top:12px;font-size:11px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:5px}
+.sw{width:12px;height:12px;border-radius:3px;border:1px solid #6b7568;display:inline-block}
+.tools{display:flex;flex-direction:column}
+.sec{border-top:1px solid var(--line);padding:13px 16px}
+.sec:first-child{border-top:0}
+.sec h2{font:10px ui-monospace,monospace;color:var(--sage);letter-spacing:.13em;margin:0 0 8px}
+.sec p{font-size:11.5px;color:var(--muted);margin:0 0 8px}
+.mods{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mod{text-align:left;background:#f4f2ea;border:1px solid var(--line);border-radius:9px;padding:7px 8px;cursor:pointer;font:inherit;display:block}
+.mod b{display:block;font-size:12px;color:var(--ink)}
+.mod small{display:block;font:9.5px ui-monospace,monospace;color:var(--muted)}
+.mod em,.mod i{display:none;font-style:normal}
+.mod.on{border-color:var(--sage);background:#eaf0e8;box-shadow:inset 0 0 0 1px var(--sage)}
+.mod.on em{display:block;font-size:10.5px;color:#4b5a50;margin-top:4px}
+.mod.on i{display:block;font-size:10.5px;color:var(--terra);margin-top:3px}
+.mod.on i::before{content:"要点：";color:var(--muted)}
+.chipsrow{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font:11px/1 inherit;background:#f4f2ea;border:1px solid var(--line);border-radius:99px;padding:5px 9px;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--terra);border-color:var(--terra);color:#fdfbf5}
+.pad{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-top:8px}
+.pad button{font:12px/1 inherit;background:#f4f2ea;border:1px solid var(--line);border-radius:8px;padding:7px 0;cursor:pointer;color:var(--ink)}
+.pad button:hover{border-color:var(--sage)}
+.hint{font-size:11px;color:var(--muted);margin-top:8px}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{border-left:3px solid var(--line);padding:5px 0 6px 9px;margin-bottom:8px}
+.chk li.ok{border-left-color:var(--ok)}
+.chk li.warn{border-left-color:var(--warn)}
+.chk li.bad{border-left-color:var(--bad)}
+.chk .ct{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.chk b{font-size:12px}
+.chk .res{font:10.5px ui-monospace,monospace;color:#4b5a50;text-align:right}
+.chk small{display:block;font-size:10.5px;color:var(--muted);margin-top:2px}
+.note{font-size:10.5px;color:var(--muted);margin-top:8px;padding-top:7px;border-top:1px dashed var(--line)}
+.totalrow{display:flex;align-items:baseline;gap:10px}
+.totalrow strong{font-size:31px;color:var(--sage);line-height:1}
+.totalrow span{font:11px ui-monospace,monospace;color:var(--muted)}
+.bar{margin-top:6px}
+.bar div{display:flex;justify-content:space-between;font-size:11px;color:#4b5a50}
+.bar em{font-style:normal;color:var(--muted);font:10px ui-monospace,monospace}
+.track{height:6px;background:#e6e4d8;border-radius:99px;overflow:hidden;margin-top:3px}
+.track i{display:block;height:100%;background:var(--sage)}
+.rules details{margin-top:8px}
+.rules summary{font-size:11px;color:var(--sage);cursor:pointer}
+.rules ul{margin:6px 0 0;padding-left:16px;font-size:10.5px;color:var(--muted)}
+.cmp table{width:100%;border-collapse:collapse;font-size:11px}
+.cmp th,.cmp td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:left}
+.cmp th{font:10px ui-monospace,monospace;color:var(--sage)}
+.cmp td.a,.cmp td.b{font-family:ui-monospace,monospace}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+.msg{font-size:11.5px;color:var(--sage);margin-top:8px;min-height:16px}
+.msg.bad{color:var(--bad)}
+.mask{position:fixed;inset:0;background:#20231f8c;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+.mask.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(560px,94vw);background:var(--paper);border-left:1px solid var(--line);box-shadow:-16px 0 44px #00000030;z-index:60;overflow:auto;visibility:hidden;transform:translateX(103%);transition:transform .24s ease,visibility 0s .24s}
+.drawer.on{visibility:visible;transform:none;transition:transform .24s ease,visibility 0s}
+.dhead{position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--line);padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.dhead b{font-size:15px}
+.dbody{padding:6px 18px 40px}
+.dbody section{border-top:1px solid var(--line);padding:14px 0}
+.dbody section:first-child{border-top:0}
+.dbody h3{font:10px ui-monospace,monospace;color:var(--sage);letter-spacing:.13em;margin:0 0 7px}
+.dbody h4{font-size:12.5px;margin:10px 0 4px}
+.dbody p,.dbody li{font-size:12.5px;color:#3f4740;margin:0 0 6px}
+.dbody ul{margin:0 0 6px;padding-left:18px}
+.dbody table{width:100%;border-collapse:collapse;font-size:11.5px;margin:0 0 6px}
+.dbody th,.dbody td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:left;vertical-align:top}
+.dbody th{font:10px ui-monospace,monospace;color:var(--sage);white-space:nowrap}
+.dbody td{color:#3f4740}
+.dbody em{font-style:normal;color:var(--muted)}
+.todo{color:var(--terra)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.room{width:min(100%,440px)}.wrap{padding:0 14px}.mods{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <span class="brand">FIELD / 07</span>
+  <div class="right">
+    
+    <button class="btn mini" id="btnInfo" aria-controls="drawer" aria-expanded="false">作品说明</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="k">HUMAN ENVIRONMENT · SPATIAL DESIGN · CONCEPT TOOL</div>
+  <h1>一平米静音站：校园微型安静角</h1>
+  <p>把“一平米”作为可组合的最小安静单元，在一处 5 m × 6 m 的概念空间中拖动、组合、检查与评分，输出一张带模块清单与检查结论的平面方案图。</p>
+  <div class="chips">
+    <span class="chip2">自主选题类 · 人居环境与空间设计类 · 人居环境/室内空间</span>
+    <span class="chip2">概念尺度 5.00 m × 6.00 m</span>
+    <span class="chip2">0.5 m 网格 · 1 ㎡ 模块</span>
+    <span class="chip2">单文件 · 无外部依赖</span>
+  </div>
+</section>
+
+<main class="layout">
+  <section class="board">
+    <div class="head"><b>空间规划台 · 俯视平面</b><span class="status">CONCEPT PLAN</span></div>
+    <div class="roomwrap">
+      <div class="roomlabel"><span>北侧为主入口 · 图面向上为示意北向</span><span id="schemeTag">当前布局：未保存</span></div>
+      <div class="room" id="room">
+        <div class="cells" id="cells" role="group" aria-label="平面网格，每格 0.5 米"></div>
+        <div class="shapes" id="shapes"></div>
+        <div class="turn" id="turn" hidden></div>
+        <svg class="north" id="north" viewBox="0 0 40 40" aria-hidden="true"></svg>
+        <div class="mark" id="doorMark" style="left:50%;transform:translateX(-50%);top:3px">入口 1.0 m</div>
+        <div class="dimline" style="left:7%;right:7%;bottom:6px"><span>5.00 m</span></div>
+        <div class="dimline v" style="top:7%;bottom:7%;left:6px"><span>6.00 m</span></div>
+        <div class="scalebar" id="scalebar" aria-hidden="true"><i></i><i></i><b style="left:0">0</b><b style="right:0">1 m</b></div>
+      </div>
+      <div class="dimensions">
+        <span>← 5.00 m →</span><span>↑ 6.00 m</span><span>每格 0.5 m · 每模块 1 ㎡</span>
+      </div>
+    </div>
+    <div class="details">图中每格 0.5 m × 0.5 m，每个家具模块占 1 ㎡（2 × 2 格）。中央 2 格为预留 1 m 通行带，地毯为可踩踏模块、不计入阻挡。图中家具轮廓为示意符号，比例按各模块标注尺寸绘制。</div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <aside class="tools">
+    <div class="sec">
+      <h2>01 / 模块库</h2>
+      <p>点选模块后点击平面网格放置，也可把卡片直接拖到网格上。选中卡片会展开功能与布置要点。</p>
+      <div class="mods" id="mods"></div>
+    </div>
+
+    <div class="sec">
+      <h2>02 / 已放置模块</h2>
+      <div class="chipsrow" id="chips"></div>
+      <div class="pad" id="pad">
+        <button data-d="up" aria-label="上移 0.5 米">↑</button>
+        <button data-d="down" aria-label="下移 0.5 米">↓</button>
+        <button data-d="left" aria-label="左移 0.5 米">←</button>
+        <button data-d="right" aria-label="右移 0.5 米">→</button>
+        <button data-a="rot">旋转 90°</button>
+        <button data-a="del">移除</button>
+      </div>
+      <div class="hint">键盘：Tab 进入网格 → 方向键移动焦点 → Enter 放置 / 选中 → Delete 移除所选。</div>
+    </div>
+
+    <div class="sec">
+      <h2>03 / 概念检查</h2>
+      <ul class="chk" id="checks" aria-live="polite"></ul>
+      <div class="note">以上为概念层面的几何自查，用于方案比较；不等同于无障碍、消防、疏散或声学的规范审查。</div>
+    </div>
+
+    <div class="sec">
+      <h2>04 / 方案评分卡</h2>
+      <div class="totalrow"><strong id="total">0</strong><span id="grade">/ 100</span></div>
+      <div id="bars"></div>
+      <div class="rules">
+        <details open><summary>评分规则（公开可复算）</summary><ul id="rules"></ul></details>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>05 / 两个方案对比</h2>
+      <div class="btns">
+        <button class="btn mini" id="saveA">存为方案 A</button>
+        <button class="btn mini" id="saveB">存为方案 B</button>
+        <button class="btn mini" id="loadA" disabled>载入 A</button>
+        <button class="btn mini" id="loadB" disabled>载入 B</button>
+        <button class="btn mini" id="doCmp">对比</button>
+      </div>
+      <div class="cmp" id="cmp"></div>
+    </div>
+
+    <div class="sec">
+      <h2>06 / 示例方案与导出</h2>
+      <div class="btns">
+        <button class="btn mini" id="loadDemo">载入示例方案</button>
+        <button class="btn mini" id="clearAll">清空</button>
+        <button class="btn mini" id="reset">恢复初始布局</button>
+        <button class="btn primary mini" id="expSvg">导出 SVG 平面图</button>
+        <button class="btn mini" id="expPng">导出 PNG 图片</button>
+        <button class="btn mini" id="expJson">导出方案 JSON</button>
+      </div>
+      <div class="hint">「载入示例方案」一键布置含围合、座位、绿植与灯台的完整布局，六项检查与五维评分立即出结果，便于演示与录屏；「清空」用于从空白开始自行排布。</div>
+      <div class="msg" id="msg" aria-live="polite"></div>
+    </div>
+  </aside>
+</main>
+</div>
+
+<div class="mask" id="mask" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dtitle" aria-hidden="true">
+  <div class="dhead"><b id="dtitle">作品说明 · 一平米静音站</b>
+    <button class="btn mini" id="btnClose">关闭 (Esc)</button>
+  </div>
+  <div class="dbody">
+    <section>
+      <h3>01 / 作品简介与目标用户</h3>
+      <p>本作品把“一平米”定义为校园与公共建筑边角空间中的<strong>最小安静单元</strong>，用可拖动、可检查、可评分的方式，组织成一处 5 m × 6 m 的微型安静角，并输出带模块清单与检查结论的概念平面图。</p>
+      <h4>目标用户</h4>
+      <ul>
+        <li>课间、午间需要 10–20 分钟短时休息的学生；</li>
+        <li>需要独处阅读、不被穿行视线打扰的人；</li>
+        <li>从嘈杂环境进入安静状态前的情绪缓冲需求者。</li>
+      </ul>
+      <h4>空间原型与调研依据</h4>
+      <p>平面为<strong>抽象概念模型</strong>：5.00 m × 6.00 m 方形空间、北侧 1.0 m 主入口、中央 1 m 通行带、0.5 m 模数网格、图面向上为示意北向。该尺度、朝向与开口位置是为表达设计逻辑而设定的教学演示值。</p>
+      <p class="todo">本作品未使用任何真实场地的现场测量数据，也未使用任何用户访谈结果。若申报或落地涉及具体地域，须由团队补充现场测量、使用者访谈与规范复核（本作品中如实标注为“未开展”）。</p>
+    </section>
+    <section>
+      <h3>02 / 设计说明（空间设计核心材料）</h3>
+      <h4>① 设计对象与需求</h4>
+      <p><strong>设计对象：</strong>一处 5.00 m × 6.00 m 的校园室内边角空间（<strong>概念对象，非真实场地</strong>），设定北侧 1.0 m 主入口、图面向上为示意北向。<strong>设计目标：</strong>用最少的构件，把一处可被快速改造的边角空间组织成可停留、可独处、可缓冲的微型安静角。</p>
+      <p><strong>三类使用需求：</strong></p>
+      <ul>
+        <li><strong>校园短时休息</strong>（10–20 分钟）：要求就近可达、易进易出，坐下与离开都不打扰他人。</li>
+        <li><strong>独处阅读</strong>：要求有背靠与侧向围合、有局部照明，不被穿行视线与来往人流打断。</li>
+        <li><strong>情绪缓冲</strong>：从嘈杂环境进入安静状态前需要过渡，要求有"半围合、可停留、不必立刻独处"的中间层次。</li>
+      </ul>
+      <h4>需求之间的冲突点，以及本方案的处理方式</h4>
+      <ul>
+        <li><strong>穿行 ↔ 停留：</strong>通行要求通畅，安静要求遮挡。<em>处理：</em>中央保留一条贯通的 1 m 通行带，把"穿行"与"停留"分层，围合构件全部靠边布置。</li>
+        <li><strong>独处 ↔ 开放：</strong>围合越强越安静，但视线死角与管理可见性变差。<em>处理：</em>采用半高屏风与门帘软分隔，上部视线可穿透，不形成封闭腔体。</li>
+        <li><strong>收纳 ↔ 通行：</strong>置物架与绿植最易侵占走道。<em>处理：</em>除地毯外，所有模块一律避开中央通行带与入口区；地毯是唯一允许压通行带的模块。</li>
+        <li><strong>阅读照明 ↔ 眩光与能耗：</strong><em>处理：</em>不做整体提亮，只在座位 1.5 m 内设阅读灯台，以局部照明替代全场照明。</li>
+      </ul>
+      <h4>② 功能分区逻辑</h4>
+      <ul>
+        <li><strong>围合区（左右两侧沿墙）：</strong>由屏风、门帘、矮柜组成背靠墙的安静单元，是围合度的主要来源。</li>
+        <li><strong>通行区（中央 1 m 纵向带）：</strong>自入口直达空间深处，不布置任何不可踩踏模块，承担全部穿行与到达功能。</li>
+        <li><strong>阅读位：</strong>座椅背靠围合构件、正面留出 ≥1 m 活动空间，1.5 m 内有阅读灯台，两个阅读位之间互不穿越。</li>
+        <li><strong>视线缓冲（入口内侧一排）：</strong>以门帘与绿植弱化走道对座位区的视线直射，做"软过渡"而非硬隔断。</li>
+        <li><strong>领域提示：</strong>地毯标示"轻声区"，可踩踏、不阻断通行，用于行为提示而非空间分隔。</li>
+      </ul>
+      <h4>③ 动线分析</h4>
+      <ul>
+        <li><strong>主路径：</strong>入口（北侧 2.0–3.0 m 处）→ 入口内侧缓冲 → 沿中央 1 m 通行带向南 → 分流至左右座位周边空位。工具以入口内侧格为起点做连通性搜索，路径长度以格数（每格 0.5 m）显示。</li>
+        <li><strong>为什么保留 1 m 通行带：</strong>它是唯一保证"从入口能到达所有分区"的骨架；一旦被占，入口到座位的路径立刻中断，检查项即时报警。贯通布置也让人进入座位时不必绕过其他座位，避免穿越他人的安静区。</li>
+        <li><strong>为什么是 1 m 而不是更窄：</strong>单人通行并携带书包需要侧向余量；1 m 是公共建筑走道常见的概念取值（<strong class="todo">取值依据公开原则，本作品不逐条标注条款号</strong>）。</li>
+        <li><strong>轮椅回转位置的选择：</strong>工具自动搜索 3 × 3 格（1.5 m 见方）净空，并优先选取<em>靠近入口、落在通行带一侧</em>的空地——让回转动作发生在动线上，而不是切割座位区内部，避免"能转身却坐不下"。</li>
+      </ul>
+      <h4>④ 模块选择依据（8 类模块）</h4>
+      <table>
+        <tr><th>模块</th><th>尺寸</th><th>作用</th><th>为什么这样定</th></tr>
+        <tr><td>静音屏风</td><td>1.00 × 0.12 m</td><td>遮挡视线与人声直射，形成心理围合</td><td>薄片可贴墙/贴边，占 1 ㎡ 模数却几乎不损失使用面积</td></tr>
+        <tr><td>单人座椅</td><td>0.65 × 0.70 m</td><td>短时休息与独处阅读的核心落座点</td><td>单人尺度，不占满 1 ㎡，四周留出活动余量</td></tr>
+        <tr><td>置物架</td><td>1.00 × 0.35 m</td><td>收纳书包与随身物，兼作低矮分隔</td><td>0.35 m 深可放书包，高度控制在视线以下以保持通透</td></tr>
+        <tr><td>绿植</td><td>0.60 × 0.60 m</td><td>软化界面、缓冲情绪、提示轻声行为</td><td>盆栽常见冠幅，四周留约 0.4 m 养护间隙</td></tr>
+        <tr><td>阅读灯台</td><td>0.45 × 0.45 m</td><td>座位局部照明，支持阅读</td><td>台灯占地小，可放在座椅 1.5 m 内而不侵占座位</td></tr>
+        <tr><td>地毯</td><td>1.00 × 1.00 m</td><td>限定领域感，提示轻声行为；可踩踏</td><td>唯一允许压通行带的模块，用于标示而不阻断</td></tr>
+        <tr><td>书立矮柜</td><td>1.00 × 0.40 m</td><td>书刊取阅与低矮隔断，可替代部分屏风</td><td>柜前须留约 1 m 取书空间，因此一律沿墙布置</td></tr>
+        <tr><td>门帘隔断</td><td>1.00 × 0.10 m</td><td>软性分隔，弱化走道视线干扰</td><td>不替代门扇、不参与疏散计算，只承担视线缓冲</td></tr>
+      </table>
+      <p><strong>为什么是 1 ㎡ 模数：</strong>0.5 m 网格的 2 × 2 格正好是 1 ㎡，与"一平米"的命题直接对应；8 类模块统一收进 1 ㎡ 后，任意组合的占地 = 件数 × 1 ㎡，可即时估算占地率与构件数量；1 ㎡ 也接近单人停留的最小舒适领域，便于在有限边角空间中做"加法"式的组合、复制与比较。</p>
+      <h4>⑤ "静音"的含义澄清</h4>
+      <p>"静音"在本作品中是<strong>使用目标与行为约定</strong>（轻声、手机静音、不外放），<strong>不是隔声性能指标</strong>。本作品不宣称任何隔声量、混响时间、降噪分贝值，也不宣称任何心理治疗或康复效果。围合构件的作用是降低<em>视线直射与心理干扰</em>，不等同于声学处理。如需真实的安静效果，须由声学专业人员依据现场测量结果另行出具方案。</p>
+    </section>
+    <section>
+      <h3>03 / 调研依据与资料来源</h3>
+      <p>本方案的尺寸与约束取自下列<strong>公开依据</strong>，用于支撑概念层面的取值合理性。以下均为公开规范的<strong>原则性引用</strong>，只引用原则性条文，<strong class="todo">不逐条标注条款号，也不臆造具体数值</strong>。</p>
+      <table>
+        <tr><th>依据</th><th>本方案引用了什么</th><th>核对状态</th></tr>
+        <tr><td>《建筑设计防火规范》GB 50016（公开原则）</td><td>疏散通道应保持畅通、疏散路径不应被占用。本方案据此把"中央 1 m 通行带与入口区不被家具占用"设为检查项。</td><td class="todo">只引用原则，不标注条款号</td></tr>
+        <tr><td>《无障碍设计规范》GB 50763（公开要求）</td><td>通行与回转空间的公开要求。本方案据此设"1 m 通行带"与"1.5 m 见方回转净空"两项概念检查。</td><td class="todo">只引用原则，不标注条款号与具体直径</td></tr>
+        <tr><td>人体尺度的公开参考值</td><td>单人座椅占地约 0.6–0.7 m 见方、单人通行宽度约 0.6–0.9 m、携带物品通行需额外侧向余量；用于确定 8 类模块尺寸与 1 m 通行带取值。</td><td class="todo">为公开人体尺度参考值，不逐条标注书名与页码</td></tr>
+        <tr><td>概念设定值</td><td>5.00 m × 6.00 m 空间、0.5 m 网格、1 ㎡ 模块、北侧 1.0 m 入口、图面向上为示意北向。</td><td>为表达设计逻辑而设定的教学演示值，非实测值</td></tr>
+      </table>
+      <h4 class="todo">未开展的调研（如实列出）</h4>
+      <ul class="todo">
+        <li><strong>未开展本校（或任何真实场地）现场实测：</strong>未测量任何真实房间的开间进深、门洞净宽、采光、噪声与人流量。</li>
+        <li><strong>未开展使用者访谈与问卷：</strong>上述三类需求来自团队成员的日常观察与公开资料阅读，<strong>未经目标用户确认</strong>。</li>
+        <li>因此，上述公开依据只能支撑"概念层面的取值合理性"，<strong>不能替代现场调研</strong>，也不能作为任何合规结论。</li>
+      </ul>
+      <p>若本作品后续指向具体地域、建筑或文化资源，须由团队补充：场地实测记录、使用者访谈纪要、规范条款核对表，并以实测尺寸替换本工具中的概念取值。</p>
+    </section>
+    <section>
+      <h3>04 / 创新点</h3>
+      <h4>① 1 ㎡ 模数化的最小安静单元</h4>
+      <p>8 种家具模块统一收纳进 1 ㎡（2 × 2 格）的模数框内：屏风负责视线围合，矮柜与置物架兼顾收纳与分隔，地毯以可踩踏的方式限定领域。空间组合被简化为“1 平米的加法”，可被快速重组、复制与比较。</p>
+      <h4>② 可检查的规划工具，而不只是画面</h4>
+      <p>把“动线是否被占”“能不能转身”“座位到不到得了”变成可计算的检查项：网格连通性搜索判断入口到座位的连续路线，3 × 3 格（1.5 m 见方）判定概念回转空间，逐格核对 1 m 通行带与入口净宽。方案一改，立刻知道坏在哪一格。</p>
+      <h4>③ 规则公开的概念评分卡</h4>
+      <p>安静围合度、通行顺畅度、座位可达性、采光与照明、模块经济性五个维度的公式全部写在界面上，任何人都能手工复算，避免“好看但说不清”的主观评分。</p>
+      <h4>与普通室内设计效果图的差异</h4>
+      <p>效果图呈现最终观感与材质，本作品呈现的是<strong>可参数化、可验证、可比较的规划过程</strong>：它输出带有模块清单、检查结论与评分的平面图，而不是一张渲染图；其价值在于规则与逻辑本身，而非视觉表现。</p>
+    </section>
+    <section>
+      <h3>05 / 技术路线</h3>
+      <ul>
+        <li><strong>网格建模</strong>：0.5 m 网格 → 10 × 12 格矩阵，家具模块占 1 ㎡（2 × 2 格），位置以整数格坐标存储。</li>
+        <li><strong>连通性搜索</strong>：以入口内侧格为起点做广度优先搜索（BFS），在“被家具占据的格子”之外寻找通往座位周边空位的连续路线。</li>
+        <li><strong>几何检查</strong>：逐格统计通行带与入口占用、滑动窗口搜索 1.5 m 见方净空、按距离阈值判断灯光与围合关系。</li>
+        <li><strong>评分规则</strong>：五个维度各自独立计分并相加，公式公开可复算。</li>
+        <li><strong>导出</strong>：SVG 以字符串拼装（含尺寸标注、指北针、比例尺、图例、模块清单、检查结论），用 Blob 下载；PNG 由 SVG 经 Image 绘制到 Canvas 后 toBlob 输出；方案 JSON 输出布局与结论数据。</li>
+        <li><strong>无外部依赖</strong>：单文件 HTML + 原生 JavaScript，双击即可离线运行，不依赖网络、框架与构建工具。</li>
+        <li><strong>可用性</strong>：尊重 <code>prefers-reduced-motion</code>、支持键盘操作与 <code>:focus-visible</code>、移动端单列布局。</li>
+      </ul>
+    </section>
+    <section>
+      <h3>06 / 视觉表达说明</h3>
+      <h4>平面图的绘制规范</h4>
+      <ul>
+        <li><strong>比例尺：</strong>屏幕平面图按容器等比缩放，图形比例关系保持不变；导出的 SVG 为矢量图，附 0 / 1 / 2 m 图形比例尺，可无损放大至 A2、A1 展板尺寸。</li>
+        <li><strong>图例：</strong>8 类模块各一个色块，另加"1 m 通行带""入口""1.5 m 回转净空""入口至座位路线"共 12 项；色块取自同一套低饱和度配色，含义在全图中固定不变。</li>
+        <li><strong>尺寸标注：</strong>外轮廓标注 5.00 m（东西向）× 6.00 m（南北向），入口标注 1.0 m 净宽；模块位置以"(x, y) 米"的形式列入模块清单，与平面坐标一一对应。</li>
+        <li><strong>家具轮廓符号：</strong>均为抽象几何符号（矩形、圆、波浪线），只表达<em>占地范围与朝向</em>，不表达材质、高度与构造做法；虚线框为 1 ㎡ 模数框，实线为家具本体。</li>
+        <li><strong>配色含义：</strong>浅绿＝可通行的通行带，浅黄＝入口，蓝色虚线圈＝回转净空，蓝色点线＝入口至座位的路线；模块按类型分色，冷色为围合隔断类、暖色为停留与收纳类、绿色为自然元素；选中态统一用赭红描边。</li>
+        <li><strong>指北针：</strong>置于图面右上角，图面向上为示意北向（概念设定，非实测朝向）。</li>
+      </ul>
+      <h4>导出文件如何用于作品集与展板</h4>
+      <ul>
+        <li><strong>SVG：</strong>矢量、可无损放大，适合展板印刷与作品集排版；可用浏览器直接打开，也可用 Illustrator / Inkscape 二次编辑（例如加校徽、改图名）。</li>
+        <li><strong>PNG：</strong>默认宽 1480 px 的位图，适合答辩 PPT、作品集网页与提交系统的图片上传。</li>
+        <li><strong>JSON：</strong>记录模块类型、坐标、六项检查结果与五维评分明细，可用于复现布局、做版本管理，也便于评委复核评分规则是否可复算。</li>
+      </ul>
+    </section>
+    <section>
+      <h3>07 / 操作与运行说明</h3>
+      <ul>
+        <li><strong>运行</strong>：双击 <code>quiet.html</code>，用 Chrome / Edge / Firefox 打开即可，无需服务器与联网。</li>
+        <li><strong>放置</strong>：在“模块库”点选一种模块，再点击平面网格左上角位置；也可把模块卡片直接拖到网格上。地毯是唯一允许压通行带的模块。</li>
+        <li><strong>调整</strong>：点击平面图上的模块选中，用 ↑ ↓ ← → 移动 0.5 m，用“旋转 90°”改变朝向，用“移除”删除；也可把右侧列表中的模块条目拖到新位置。</li>
+        <li><strong>键盘</strong>：Tab 进入网格，方向键移动焦点，Enter 放置 / 选中，Delete 移除所选，Esc 关闭本说明抽屉。</li>
+        <li><strong>示例与清空</strong>：点“载入示例方案”一键布置含围合、座位、绿植与灯台的完整布局（六项检查与五维评分立即出结果，适合演示与录屏）；点“清空”从空白开始自行排布；点“恢复初始布局”回到默认布局。</li>
+        <li><strong>对比</strong>：点“存为方案 A / B”保存当前布局，点“载入 A / B”切换，点“对比”查看布局、评分与检查项差异。</li>
+        <li><strong>导出</strong>：导出 SVG 平面图（含清单与结论）、导出 PNG 图片、导出方案 JSON。</li>
+      </ul>
+    </section>
+    <section>
+      <h3>08 / 实施路径（可实施性）</h3>
+      <h4>若本方案要落地，需要依次完成下列步骤</h4>
+      <ol>
+        <li><strong>场地确认：</strong>与校方确认可用的边角空间、管理归属、开放时段与责任部门，明确是否允许增设家具与电器。</li>
+        <li><strong>现场复测：</strong>实测开间进深、梁下净高、门洞净宽、采光窗位置、插座与照明点位、地面平整度与人流情况，<strong>用实测值替换本工具中的概念尺寸</strong>（5 m × 6 m、1 m 通行带等）。</li>
+        <li><strong>材料与构造选型：</strong>屏风与矮柜饰面须按规范选定燃烧性能等级（<strong class="todo">燃烧性能等级须按现行规范由专业人员选定</strong>）；家具选圆角与稳固底座；地毯选可清洗、阻燃材质；固定方式优先可移动、免钉，保留可逆性。</li>
+        <li><strong>消防与无障碍复核：</strong>由具备资质的单位按现场条件与现行规范核查疏散路径、装修材料燃烧性能、无障碍通行与回转。<strong>本工具的六项检查不能替代该复核。</strong></li>
+        <li><strong>试用与调整：</strong>先做 1–2 周试点，记录使用时段、停留时长、冲突事件与被占用情况，再回头调整模块数量、围合程度与开放规则。</li>
+      </ol>
+      <h4>预估的主要问题与处理思路</h4>
+      <ul>
+        <li><strong>采光：</strong>边角空间常只有人工照明。<em>思路：</em>优先把阅读位靠窗布置；无窗条件则提高座位局部照度，把阅读位设在灯下——工具中的"座位 1.5 m 内有阅读灯台"检查项即为此设置（<span class="todo">照度以现行规范为准，本作品未做照度计算</span>）。</li>
+        <li><strong>通风：</strong>围合越强越易憋闷。<em>思路：</em>围合构件做成半高、上部通透，不做到顶、不形成封闭腔体，并避开送回风口。</li>
+        <li><strong>管理归属：</strong>无人管理时易被长期占用或堆放杂物。<em>思路：</em>明确责任部门并写入使用公约；导出的平面图可直接作为沟通、移交与验收的材料。</li>
+        <li><strong>夜间使用安全：</strong>照明不足与视线死角带来安全顾虑。<em>思路：</em>限制开放时段、保持入口视线通透、不做全封闭隔断、灯具位置避开眩光与暗角。</li>
+      </ul>
+      <p>以上为<strong>实施思路的书面推演</strong>，尚未进入任何真实场地的落地流程，也未取得任何审批或校方意见。</p>
+    </section>
+    <section>
+      <h3>09 / 验证与测试自查</h3>
+      <h4>已完成（团队自行核对）</h4>
+      <ul>
+        <li>公开规范自行核对：疏散与通行约束依据《建筑设计防火规范》GB 50016 的公开原则取值；<strong class="todo">只引用原则，不逐条标注条款号</strong>。</li>
+        <li>页面功能走查：按操作路径逐项验证导出文件（SVG / PNG / JSON 三种导出可用，SVG 可直接在浏览器中打开）、键盘操作（Tab 进入网格、方向键移动焦点、Enter 放置 / 选中、Delete 移除、Esc 关闭抽屉）、移动端单列布局、减少动效（<code>prefers-reduced-motion</code>）、边界提示（放置冲突与检查结论提示）；脚本语法自检通过（<code>node --check</code>）。</li>
+        <li>代码与第三方资源自查：无外部依赖、平面图中的家具轮廓与图例均由 SVG 代码绘制、无未授权第三方素材。</li>
+      </ul>
+      <h4 class="todo">尚未开展（如实列出，不作已完成陈述）</h4>
+      <ul class="todo">
+        <li><strong>专业审阅：</strong>未邀请建筑或室内专业人员审核布局规则、检查项与评分逻辑。</li>
+        <li><strong>实地测绘：</strong>未开展真实场地的现场测量，网格尺寸与模块尺寸均为便于教学表达的概念取值。</li>
+        <li><strong>用户测试：</strong>未开展目标用户任务测试，未做使用者访谈。</li>
+      </ul>
+      <h4>后续计划</h4>
+      <ul>
+        <li>邀请建筑或室内专业人员审核检查项与评分逻辑，并回填规范条款号。负责人：吴昊（团队负责人）；时间：赛后 1 个月内。</li>
+        <li>选取一处真实场地开展现场测量与使用者访谈，用实测尺寸替换概念取值。负责人：吴昊（团队负责人）；时间：赛后 2 个月内。</li>
+        <li>组织目标用户任务测试，记录完成率、误操作与主观反馈。负责人：吴昊（团队负责人）；时间：赛后 2 个月内。</li>
+      </ul>
+      <p><strong>一句话原则：本材料的表述与作品实际完成状态一致，未开展的专业审阅、实地测绘与用户测试均如实列为后续工作，未以任何形式宣称已完成。</strong></p>
+    </section>
+    <section>
+      <h3>10 / AI 使用与素材说明</h3>
+      <ul>
+        <li><strong>AI 辅助</strong>：本作品的界面与算法代码在人工智能辅助下编写，包括网格建模、连通性搜索、检查与评分规则、SVG / PNG 导出逻辑。</li>
+        <li><strong>图形素材</strong>：平面图中的家具轮廓、图例、指北针、比例尺均由本工具以 SVG 代码绘制，未使用任何第三方图片、图标或字体素材。</li>
+        <li><strong>团队原创贡献</strong>：主创 吴昊（团队负责人）：整体设计、六项检查与五维评分规则定调、最终把关。技术实现 徐志：六项检查逻辑、五维评分公式、两方案对比、SVG 导出。内容与设计 苏张柏绮：平面与网格、8 类模块、空间原型与依据、实施路径。全部代码、文案与视觉元素由团队自行完成，未使用第三方图片、字体、图标或音频素材。</li>
+      </ul>
+    </section>
+    <section>
+      <h3>11 / 边界声明</h3>
+      <ul>
+        <li>本作品是<strong>概念规划工具</strong>，输出的不是施工图、报审图或竣工图。</li>
+        <li>本作品<strong>不进行声学仿真</strong>，也不宣称任何隔声量、混响时间或心理治疗、康复效果。</li>
+        <li>检查项中的“1 m 通行带”“1.5 m 回转”是为便于教学表达而设定的<strong>概念几何值</strong>，不等同于现行无障碍与消防规范条文，不构成任何合规结论。</li>
+        <li>凡涉及合规、安全与健康效果的结论，均须由具备资质的专业人员依据现场实测与现行规范另行出具。</li>
+      </ul>
+    </section>
+    <section>
+      <h3>12 / 版本与变更记录</h3>
+      <table>
+        <tr><th>版本</th><th>日期</th><th>主要内容</th><th>阶段</th></tr>
+        <tr><td>v1</td><td>2026-10-18</td><td>概念提出与模块定义：确定"1 ㎡ 最小安静单元"命题、8 类模块的功能与尺寸、5 m × 6 m 概念平面框架。</td><td>概念阶段</td></tr>
+        <tr><td>v2</td><td>2026-10-18</td><td>规划工具化：网格放置与旋转、六项几何检查、五维概念评分、双方案保存与对比、SVG / PNG / JSON 导出、作品说明抽屉。</td><td>工具阶段</td></tr>
+        <tr><td>v3</td><td>2026-10-18</td><td>完整作品要素补齐：新增设计说明、调研依据与资料来源、实施路径、视觉表达说明、示例方案一键载入与清空、版本与变更记录。</td><td>材料完善版</td></tr>
+        <tr><td>v4（当前）</td><td>2026-10-22</td><td>提交版整理：补齐团队原创贡献清单与真实署名；版本表补入实际日期并接入公开仓库；全文去除占位表述。</td><td>提交版</td></tr>
+      </table>
+      <p>以上日期与公开仓库的提交历史一致，可逐次核对：github.com/junming49/blue-boundary-coral-reef/commits/main 。</p>
+    </section>
+  </div>
+</aside>
+
+<script>
+/* ============ 1. 常量与模块数据 ============ */
+const CW=10, RH=12, CS=0.5;                 // 0.5 m 网格 → 10×12 格 = 5 m × 6 m
+const DOOR=[{x:4,y:0},{x:5,y:0}];           // 北侧 1.0 m 主入口
+const FRONT=[{x:4,y:1},{x:5,y:1}];          // 入口内侧缓冲格
+const LANE_X=[4,5];                         // 中央 1 m 通行带
+const TYPES=[
+ {id:'screen',name:'静音屏风',size:'1.00 × 0.12 m',fn:'阻挡视线与人声直射，形成心理围合',use:'贴座椅背侧摆放，至少留一个开口；不压 1 m 通行带',fill:'#a7bcbf',walk:false},
+ {id:'seat',name:'单人座椅',size:'0.65 × 0.70 m',fn:'短时休息与独处阅读的核心落座点',use:'背靠屏风或矮柜；正面留出 ≥1 m 的活动空间',fill:'#d3a48c',walk:false},
+ {id:'shelf',name:'置物架',size:'1.00 × 0.35 m',fn:'收纳书包与随身物，兼作低矮分隔',use:'靠墙或转角布置，避免在通行带内取物',fill:'#c9b184',walk:false},
+ {id:'plant',name:'绿植',size:'0.60 × 0.60 m',fn:'软化界面，缓冲情绪，提示轻声行为',use:'放转角或座椅侧后方；不进入通行带与回转区',fill:'#a3c096',walk:false},
+ {id:'lamp',name:'阅读灯台',size:'0.45 × 0.45 m',fn:'提供座位局部照明，支持阅读',use:'置于座椅 1.5 m 内；灯头高度不遮挡视线',fill:'#e2cf8d',walk:false},
+ {id:'rug',name:'地毯',size:'1.00 × 1.00 m',fn:'限定领域感，提示轻声行为；可踩踏',use:'唯一允许压通行带的模块，用于标示安静领域',fill:'#cdb99c',walk:true},
+ {id:'cabinet',name:'书立矮柜',size:'1.00 × 0.40 m',fn:'书刊取阅与低矮隔断，可替代部分屏风',use:'柜前留 1 m 取书空间；可与屏风组成 L 形围合',fill:'#bda588',walk:false},
+ {id:'curtain',name:'门帘隔断',size:'1.00 × 0.10 m',fn:'软性分隔，弱化走道视线干扰',use:'用于入口缓冲；不替代门扇，不参与疏散计算',fill:'#c6b2bf',walk:false}
+];
+const T=id=>TYPES.find(t=>t.id===id);
+const INIT=[['screen',2,2,0],['seat',2,4,0],['cabinet',0,3,0],['lamp',2,6,0],['plant',0,6,0],
+            ['seat',7,3,0],['screen',7,1,0],['shelf',7,7,0],['plant',8,5,0],['rug',4,7,0]];
+// 示例方案：左右两个围合单元 + 中央贯通通行带，含围合、座位、绿植、灯台，用于演示与录屏
+const DEMO=[['screen',0,2,1],['curtain',2,1,0],['seat',2,3,0],['lamp',0,4,0],['cabinet',0,6,1],['plant',2,5,0],
+            ['screen',8,2,1],['seat',6,3,0],['lamp',6,5,0],['cabinet',8,5,1]];
+
+/* ============ 2. 状态 ============ */
+let items=[], nextId=1, sel='screen', curId=null, focusIdx=0, last=null, schemes={A:null,B:null}, activeTag='未保存';
+const K=(x,y)=>x+','+y, M=v=>(v*CS).toFixed(2);
+const $=id=>document.getElementById(id);
+const cells=[], room=$('room');
+
+/* ============ 3. 小工具 ============ */
+// 模块占用的 4 个格子
+function cellsOf(it){const a=[];for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++)a.push({x:it.x+dx,y:it.y+dy});return a}
+// 不可踩踏的格子集合（地毯可踩踏）
+function blockedSet(){const s=new Set();items.forEach(it=>{if(!T(it.type).walk)cellsOf(it).forEach(c=>s.add(K(c.x,c.y)))});return s}
+function inb(x,y){return x>=0&&x<CW&&y>=0&&y<RH}
+// 广度优先搜索：从入口内侧走到目标格
+function bfs(start,targets,blocked){
+  const set=new Set(targets), seen=new Set([K(start.x,start.y)]);
+  if(blocked.has(K(start.x,start.y)))return null;
+  let q=[[start]];
+  while(q.length){const p=q.shift(),t=p[p.length-1];
+    if(set.has(K(t.x,t.y)))return p;
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+      const n={x:t.x+dx,y:t.y+dy},k=K(n.x,n.y);
+      if(inb(n.x,n.y)&&!blocked.has(k)&&!seen.has(k)){seen.add(k);q.push([...p,n])}
+    }
+  }
+  return null;
+}
+
+/* ============ 4. 家具图形（1 m = 100 单位） ============ */
+function shapeBody(type){
+  const f=T(type).fill, s='#3f4f43';
+  return {
+    screen:'<rect x="5" y="44" width="90" height="12" rx="5" fill="'+f+'" stroke="'+s+'" stroke-width="2.5"/><path d="M23 44v12M41 44v12M59 44v12M77 44v12" stroke="'+s+'" stroke-width="1.5" opacity=".65"/>',
+    seat:'<rect x="17" y="15" width="66" height="10" rx="4" fill="'+f+'" stroke="'+s+'" stroke-width="2.5"/><rect x="17" y="25" width="66" height="60" rx="9" fill="'+f+'" fill-opacity=".5" stroke="'+s+'" stroke-width="2.5"/><rect x="17" y="34" width="7" height="42" rx="3" fill="'+f+'" stroke="'+s+'" stroke-width="1.6"/><rect x="76" y="34" width="7" height="42" rx="3" fill="'+f+'" stroke="'+s+'" stroke-width="1.6"/>',
+    shelf:'<rect x="5" y="32" width="90" height="36" rx="3" fill="'+f+'" stroke="'+s+'" stroke-width="2.5"/><path d="M5 44h90M5 56h90M32 32v36M68 32v36" stroke="'+s+'" stroke-width="1.4" opacity=".7"/>',
+    plant:'<circle cx="50" cy="47" r="31" fill="'+f+'" fill-opacity=".45" stroke="'+s+'" stroke-width="1.7" stroke-dasharray="5 4"/><circle cx="50" cy="47" r="16" fill="'+f+'" stroke="'+s+'" stroke-width="2.5"/><path d="M50 31v32M34 47h32" stroke="'+s+'" stroke-width="1.2" opacity=".45"/>',
+    lamp:'<circle cx="50" cy="50" r="24" fill="'+f+'" fill-opacity=".5" stroke="'+s+'" stroke-width="1.6" stroke-dasharray="4 4"/><circle cx="50" cy="50" r="10" fill="'+f+'" stroke="'+s+'" stroke-width="2.5"/><path d="M50 12v10M50 78v10M12 50h10M78 50h10" stroke="'+s+'" stroke-width="1.6" opacity=".6"/>',
+    rug:'<rect x="4" y="4" width="92" height="92" rx="8" fill="'+f+'" fill-opacity=".5" stroke="'+s+'" stroke-width="2" stroke-dasharray="7 5"/><rect x="15" y="15" width="70" height="70" rx="5" fill="none" stroke="'+s+'" stroke-width="1.1" stroke-dasharray="4 5" opacity=".55"/>',
+    cabinet:'<rect x="5" y="30" width="90" height="40" rx="3" fill="'+f+'" stroke="'+s+'" stroke-width="2.5"/><path d="M5 44h90M28 30v40M50 30v40M72 30v40" stroke="'+s+'" stroke-width="1.4" opacity=".65"/>',
+    curtain:'<path d="M5 50q7 -13 15 0t15 0q7 -13 15 0t15 0q7 -13 15 0t15 0" fill="none" stroke="'+f+'" stroke-width="10" stroke-linecap="round"/><path d="M5 41h90" stroke="'+s+'" stroke-width="2.5"/>'
+  }[type];
+}
+// 完整图形：1 ㎡ 模数虚线框 + 家具本体（可旋转）
+function shapeSVG(type,rot){
+  const box='<rect x="2" y="2" width="96" height="96" rx="4" fill="none" stroke="#8a8f7d" stroke-width="1" stroke-dasharray="3 5" opacity=".5"/>';
+  const body=shapeBody(type);
+  return rot?box+'<g transform="rotate(90 50 50)">'+body+'</g>':box+body;
+}
+
+/* ============ 5. 检查 ============ */
+function audit(){
+  const blocked=blockedSet(), a={blocked:blocked};
+  // 入口
+  a.door={bad:[],ok:true};
+  DOOR.concat(FRONT).forEach(c=>{if(blocked.has(K(c.x,c.y)))a.door.bad.push(c)});
+  a.door.ok=a.door.bad.length===0;
+  a.door.names=uniqNames(a.door.bad);
+  // 1 m 通行带
+  a.lane={n:0,names:[]};
+  LANE_X.forEach(x=>{for(let y=0;y<RH;y++)if(blocked.has(K(x,y)))a.lane.n++});
+  items.forEach(it=>{if(!T(it.type).walk&&it.x<=5&&it.x+2>4)a.lane.names.push(T(it.type).name)});
+  a.lane.names=[...new Set(a.lane.names)];
+  a.lane.ok=a.lane.n===0;
+  // 1.5 m 回转（3×3 格）
+  a.turn={ok:false,x:0,y:0};
+  let best=1e9;
+  for(let y=0;y<RH-2;y++)for(let x=0;x<CW-2;x++){
+    let free=true;
+    for(let dy=0;dy<3&&free;dy++)for(let dx=0;dx<3;dx++)if(blocked.has(K(x+dx,y+dy))){free=false;break}
+    if(free){const d=y+Math.abs(x-4); if(d<best){best=d;a.turn={ok:true,x:x,y:y}}}
+  }
+  // 座位
+  a.seats=items.filter(it=>it.type==='seat').map(it=>{
+    const ring=[];
+    for(let dy=-1;dy<3;dy++)for(let dx=-1;dx<3;dx++){
+      const x=it.x+dx,y=it.y+dy;
+      if(dx>=0&&dx<2&&dy>=0&&dy<2)continue;
+      if(inb(x,y)&&!blocked.has(K(x,y)))ring.push(K(x,y));
+    }
+    const r=bfs({x:4,y:1},ring,blocked);
+    // 1.5 m 内是否有阅读灯台
+    const cx=it.x+1, cy=it.y+1;
+    const lamp=items.some(l=>l.type==='lamp'&&Math.hypot(l.x+1-cx,l.y+1-cy)*CS<=1.5);
+    // 2 m 内的围合构件数（屏风 / 门帘 / 矮柜按 0.5 计）
+    let enc=0;
+    items.forEach(o=>{
+      if(o===it)return;
+      if(o.type!=='screen'&&o.type!=='curtain'&&o.type!=='cabinet')return;
+      if(Math.hypot(o.x+1-cx,o.y+1-cy)*CS<=2)enc+=(o.type==='cabinet'?0.5:1);
+    });
+    return {id:it.id,x:it.x,y:it.y,free:ring.length,reach:!!r,steps:r?r.length:0,lamp:lamp,enc:Math.min(1,enc/2)};
+  });
+  a.reachCount=a.seats.filter(s=>s.reach).length;
+  a.maxStep=a.seats.length?Math.max(...a.seats.map(s=>s.steps)):0;
+  a.minFree=a.seats.length?Math.min(...a.seats.map(s=>s.free)):0;
+  // 绿植 / 灯具是否压动线
+  a.circ=[];
+  items.forEach(it=>{
+    if(it.type!=='plant'&&it.type!=='lamp')return;
+    if(it.x<=5&&it.x+2>4)a.circ.push(T(it.type).name+'（通行带）');
+    else if(DOOR.concat(FRONT).some(c=>c.x>=it.x&&c.x<it.x+2&&c.y>=it.y&&c.y<it.y+2))a.circ.push(T(it.type).name+'（入口区）');
+  });
+  // 围合度
+  a.enc=a.seats.length?a.seats.reduce((s,v)=>s+v.enc,0)/a.seats.length:0;
+  return a;
+}
+function uniqNames(cs){
+  const ns=[];
+  cs.forEach(c=>{const it=items.find(v=>v.x<=c.x&&v.x+2>c.x&&v.y<=c.y&&v.y+2>c.y);if(it)ns.push(T(it.type).name)});
+  return [...new Set(ns)].join('、');
+}
+
+/* ============ 6. 评分（规则公开） ============ */
+function econ(n){return n>=6&&n<=10?15:Math.max(0,n<6?15-(6-n)*3:15-(n-10)*2)}
+function score(a){
+  const enc=Math.round(a.enc*25);
+  const pass=(a.door.ok?10:0)+(a.lane.ok?10:0)+(a.turn.ok?5:0);
+  const acc=a.seats.length?5+Math.round(10*a.reachCount/a.seats.length)+Math.round(5*Math.min(1,a.minFree/3)):0;
+  const light=Math.min(15,Math.round(7.5*a.seats.filter(s=>s.lamp).length));
+  const eco=econ(items.length);
+  const d=[
+    ['安静围合度',enc,25,'围合度 × 25'],
+    ['通行顺畅度',pass,25,'入口通畅 10 + 通行带通畅 10 + 有 1.5 m 净空 5'],
+    ['座位可达性',acc,20,'有座椅 5 + 可达比例 × 10 + 周边空位充足度 × 5'],
+    ['采光与照明',light,15,'每个 1.5 m 内有阅读灯台的座位 7.5 分，上限 15'],
+    ['模块经济性',eco,15,'模块 6–10 件得 15；每少 1 件 −3，每多 1 件 −2，最低 0']
+  ];
+  const total=d.reduce((s,v)=>s+v[1],0);
+  return {d:d,total:total,grade:total>=80?'优 · 可继续深化':total>=60?'可深化 · 仍有短板':'需调整 · 建议重排动线'};
+}
+
+/* ============ 7. 渲染 ============ */
+function buildCells(){
+  for(let y=0;y<RH;y++)for(let x=0;x<CW;x++){
+    const c=document.createElement('button');
+    c.type='button'; c.className='cell'; c.dataset.x=x; c.dataset.y=y; c.tabIndex=-1;
+    if(LANE_X.indexOf(x)>=0)c.classList.add('lane');
+    if(DOOR.some(d=>d.x===x&&d.y===y))c.classList.add('door');
+    if(((x>>1)+(y>>1))%2)c.classList.add('alt');   // 1 m×1 m 棋盘底纹
+    c.addEventListener('click',()=>onCell(x,y));
+    c.addEventListener('keydown',e=>onKey(e,x,y));
+    c.addEventListener('dragover',e=>{e.preventDefault();c.classList.add('over')});
+    c.addEventListener('dragleave',()=>c.classList.remove('over'));
+    c.addEventListener('drop',e=>{e.preventDefault();c.classList.remove('over');onDrop(x,y,e)});
+    cells.push(c); $('cells').appendChild(c);
+  }
+  cells[0].tabIndex=0;
+}
+function buildMods(){
+  $('mods').innerHTML=TYPES.map(t=>
+    '<button class="mod'+(t.id===sel?' on':'')+'" type="button" aria-pressed="'+(t.id===sel)+'" data-type="'+t.id+'" draggable="true">'+
+    '<b>'+t.name+'</b><small>'+t.size+' · 1 ㎡</small><em>'+t.fn+'</em><i>'+t.use+'</i></button>').join('');
+  [...$('mods').children].forEach(b=>{
+    b.onclick=()=>{sel=b.dataset.type;[...$('mods').children].forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',x===b)})};
+    b.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain','new:'+b.dataset.type));
+  });
+}
+function buildLegend(){
+  const sw=TYPES.map(t=>'<span><i class="sw" style="background:'+t.fill+'"></i>'+t.name+'</span>').join('');
+  $('legend').innerHTML=sw+
+    '<span><i class="sw" style="background:#cfe6cd"></i>1 m 通行带</span>'+
+    '<span><i class="sw" style="background:#f2dda8"></i>入口</span>'+
+    '<span><i class="sw" style="background:#eef4f6;border-style:dashed"></i>1.5 m 回转净空</span>'+
+    '<span><i class="sw" style="background:#3f6ea8;border-radius:50%"></i>入口至座位路线</span>';
+}
+function drawNorth(){
+  $('north').innerHTML='<circle cx="20" cy="20" r="17" fill="#fdfcf6dd" stroke="#6b7568" stroke-width="1.5"/>'+
+    '<path d="M20 6 L26 30 L20 25 L14 30 Z" fill="#5c685d"/><text x="20" y="14" font-size="9" fill="#5c685d" text-anchor="middle">N</text>';
+}
+function render(){
+  const a=audit(), sc=score(a); last={a:a,sc:sc};
+  const occ=new Map();
+  items.forEach(it=>cellsOf(it).forEach(c=>occ.set(K(c.x,c.y),it)));
+  // 网格状态
+  const routeSet=new Set();
+  a.seats.forEach(s=>{if(s.reach){const r=bfs({x:4,y:1},ringOf(items.find(v=>v.id===s.id)),a.blocked);if(r)r.forEach(p=>routeSet.add(K(p.x,p.y)))}});
+  cells.forEach(c=>{
+    const x=+c.dataset.x, y=+c.dataset.y, it=occ.get(K(x,y));
+    c.classList.toggle('has',!!it);
+    c.classList.toggle('route',routeSet.has(K(x,y)));
+    c.classList.toggle('sel',!!it&&it.id===curId);
+    if(it){c.setAttribute('aria-label',T(it.type).name+'，位置 '+M(it.x)+' , '+M(it.y)+' 米，回车选中')}
+    else{c.setAttribute('aria-label',(LANE_X.indexOf(x)>=0?'通行带':'空位')+'，'+M(x)+' , '+M(y)+' 米，回车放置'+T(sel).name)}
+  });
+  // 家具轮廓
+  $('shapes').innerHTML=items.map(it=>
+    '<div class="shape'+(it.id===curId?' on':'')+'" style="left:'+(it.x/CW*100)+'%;top:'+(it.y/RH*100)+'%;width:'+(2/CW*100)+'%;height:'+(2/RH*100)+'%">'+
+    '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+shapeSVG(it.type,it.rot)+'</svg>'+
+    '<span class="tag">'+T(it.type).name+'</span></div>').join('');
+  // 1.5 m 回转圈
+  if(a.turn.ok){
+    $('turn').hidden=false;
+    $('turn').style.left=(a.turn.x/CW*100)+'%'; $('turn').style.top=(a.turn.y/RH*100)+'%';
+    $('turn').style.width=(3/CW*100)+'%'; $('turn').style.height=(3/RH*100)+'%';
+    $('turn').textContent='回转 1.5 m';
+  }else $('turn').hidden=true;
+  renderChips(); renderChecks(a); renderScore(sc);
+  $('schemeTag').textContent='当前布局：'+activeTag+' · 模块 '+items.length+' 件';
+}
+function ringOf(it){
+  const r=[];
+  for(let dy=-1;dy<3;dy++)for(let dx=-1;dx<3;dx++){
+    if(dx>=0&&dx<2&&dy>=0&&dy<2)continue;
+    const x=it.x+dx,y=it.y+dy;
+    if(inb(x,y))r.push({x:x,y:y});
+  }
+  return r;
+}
+function renderChips(){
+  $('chips').innerHTML=items.map(it=>
+    '<button class="chip'+(it.id===curId?' on':'')+'" type="button" data-id="'+it.id+'" draggable="true">'+
+    T(it.type).name+' · '+M(it.x)+','+M(it.y)+'</button>').join('');
+  [...$('chips').children].forEach(b=>{
+    b.onclick=()=>{curId=+b.dataset.id;render()};
+    b.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain','move:'+b.dataset.id));
+  });
+  [...$('pad').children].forEach(b=>b.disabled=!curId);
+}
+function renderChecks(a){
+  const rows=[];
+  rows.push(['入口净宽 1.0 m',a.door.ok?'ok':'bad',
+    a.door.ok?'通畅：入口与内侧缓冲格无家具':'占用 '+a.door.bad.length+' 格（'+a.door.names+'）',
+    '入口按 1.0 m 概念净宽预留；此处只检查家具是否压住入口及其内侧一排格子。']);
+  rows.push(['1 m 通行带',a.lane.ok?'ok':'bad',
+    a.lane.ok?'全程通畅（6.00 m）':'占用 '+a.lane.n+' 格（'+a.lane.names+'）',
+    '检查中央 2 格宽纵向通行带是否连续；地毯为可踩踏模块，不计入阻挡。']);
+  rows.push(['轮椅回转 1.5 m',a.turn.ok?'ok':'warn',
+    a.turn.ok?'有 1.5 m 见方净空（'+M(a.turn.x)+' , '+M(a.turn.y)+' m）':'未找到 1.5 m 见方净空',
+    '以 3 × 3 格（1.5 m 见方）的净空近似概念回转圆，仅表示有无足够空地。']);
+  const sc=a.seats.length;
+  rows.push(['座椅周边可达',
+    !sc?'bad':(a.reachCount===sc?(a.minFree>=3?'ok':'warn'):'bad'),
+    !sc?'尚未布置座椅':a.reachCount+'/'+sc+' 座可达 · 路径 '+a.maxStep+' 格 · 周边空位 '+a.minFree+' 格',
+    '从入口内侧格做连通性搜索到座位周边空位，并统计座位四周空余格数。']);
+  rows.push(['绿植 / 灯具遮挡动线',a.circ.length?'warn':'ok',
+    a.circ.length?a.circ.join('、'):'未进入通行带与入口区',
+    '绿植与灯具体量小但仍占 1 ㎡ 模块，检查其是否落在通行带或入口区。']);
+  rows.push(['屏风围合度',a.enc>=0.66?'ok':(a.enc>=0.33?'warn':'bad'),
+    Math.round(a.enc*100)+'% · 每座 2 m 内围合构件均值',
+    '统计每座位 2 m 内的屏风 / 门帘（矮柜按 0.5 计），达到 2 个记为完全围合。']);
+  $('checks').innerHTML=rows.map(r=>
+    '<li class="'+r[1]+'"><div class="ct"><b>'+r[0]+'</b><span class="res">'+r[2]+'</span></div><small>'+r[3]+'</small></li>').join('');
+}
+function renderScore(sc){
+  $('total').textContent=sc.total;
+  $('grade').textContent='/ 100 · '+sc.grade;
+  $('bars').innerHTML=sc.d.map(v=>
+    '<div class="bar"><div><span>'+v[0]+'</span><em>'+v[1]+' / '+v[2]+'</em></div>'+
+    '<div class="track"><i style="width:'+(v[1]/v[2]*100)+'%"></i></div></div>').join('');
+  $('rules').innerHTML=sc.d.map(v=>'<li>'+v[0]+'（满分 '+v[2]+'）：'+v[3]+'</li>').join('')+
+    '<li>总分 = 五维之和，范围 0–100；两方案使用同一规则计算，便于横向比较。</li>';
+}
+
+/* ============ 8. 编辑交互 ============ */
+function say(m,bad){const e=$('msg');e.textContent=m;e.classList.toggle('bad',!!bad)}
+function fit(x,y){return x>=0&&y>=0&&x+2<=CW&&y+2<=RH}
+function hit(x,y,id){
+  return items.some(v=>v.id!==id&&x<v.x+2&&x+2>v.x&&y<v.y+2&&y+2>v.y);
+}
+function onCell(x,y){
+  const it=items.find(v=>v.x<=x&&v.x+2>x&&v.y<=y&&v.y+2>y);
+  if(it){curId=it.id;render();return}
+  if(!fit(x,y)){say('模块超出房间边界。',true);return}
+  if(hit(x,y,null)){say('该位置与其他模块重叠。',true);return}
+  items.push({id:nextId++,type:sel,x:x,y:y,rot:0});
+  curId=nextId-1; say('已放置「'+T(sel).name+'」。',false); render();
+}
+function onKey(e,x,y){
+  const i=y*CW+x; let n=null;
+  if(e.key==='ArrowRight'&&x<CW-1)n=i+1;
+  else if(e.key==='ArrowLeft'&&x>0)n=i-1;
+  else if(e.key==='ArrowDown'&&y<RH-1)n=i+CW;
+  else if(e.key==='ArrowUp'&&y>0)n=i-CW;
+  else if((e.key==='Delete'||e.key==='Backspace')&&curId){e.preventDefault();del()}
+  if(n!==null){e.preventDefault();cells[focusIdx].tabIndex=-1;focusIdx=n;cells[n].tabIndex=0;cells[n].focus()}
+}
+function onDrop(x,y,e){
+  const d=e.dataTransfer.getData('text/plain')||'';
+  if(d.indexOf('move:')===0){
+    const it=items.find(v=>v.id==+d.slice(5));
+    if(it)moveTo(it,x,y);
+  }else if(d.indexOf('new:')===0){
+    const t=d.slice(4);
+    if(!fit(x,y)){say('模块超出房间边界。',true);return}
+    if(hit(x,y,null)){say('该位置与其他模块重叠。',true);return}
+    items.push({id:nextId++,type:t,x:x,y:y,rot:0});curId=nextId-1;say('已放置「'+T(t).name+'」。',false);render();
+  }
+}
+function moveTo(it,x,y){
+  if(!fit(x,y)){say('超出房间边界。',true);return}
+  if(hit(x,y,it.id)){say('该位置与其他模块重叠。',true);return}
+  it.x=x;it.y=y;render();
+}
+function shift(dx,dy){
+  const it=items.find(v=>v.id===curId); if(!it){say('先在平面图上选中一个模块。',true);return}
+  moveTo(it,it.x+dx,it.y+dy);
+}
+function rotate(){
+  const it=items.find(v=>v.id===curId); if(!it){say('先在平面图上选中一个模块。',true);return}
+  it.rot=it.rot?0:1; render();
+}
+function del(){
+  const it=items.find(v=>v.id===curId); if(!it){say('先在平面图上选中一个模块。',true);return}
+  items=items.filter(v=>v.id!==curId); curId=null; render();
+}
+$('pad').onclick=e=>{
+  const b=e.target.closest('button'); if(!b||b.disabled)return;
+  if(b.dataset.d){const m={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[b.dataset.d];shift(m[0],m[1])}
+  else if(b.dataset.a==='rot')rotate();
+  else if(b.dataset.a==='del')del();
+};
+
+/* ============ 9. 两方案保存 / 对比 ============ */
+function save(k){schemes[k]=items.map(o=>Object.assign({},o));$(k==='A'?'loadA':'loadB').disabled=false;say('已保存为方案 '+k+'（'+items.length+' 件模块）。',false)}
+function load(k){
+  if(!schemes[k]){say('方案 '+k+' 还是空的，先点「存为方案 '+k+'」。',true);return}
+  items=schemes[k].map(o=>Object.assign({},o));curId=null;activeTag='方案 '+k;render();
+  say('已载入方案 '+k+'。',false);
+}
+function compare(){
+  if(!schemes.A||!schemes.B){$('cmp').innerHTML='<p class="hint">请先把两个布局分别存为方案 A 与方案 B。</p>';return}
+  const keep=items;
+  items=schemes.A.map(o=>Object.assign({},o));const aA=audit(),A=score(aA);
+  items=schemes.B.map(o=>Object.assign({},o));const aB=audit(),B=score(aB);
+  const cnt=l=>{const m={};l.forEach(it=>m[it.type]=(m[it.type]||0)+1);return m};
+  const ca=cnt(schemes.A),cb=cnt(schemes.B);
+  const ids=TYPES.map(t=>t.id);
+  const only=Object.keys(ca).filter(k=>!cb[k]).map(k=>T(k).name+'×'+ca[k]);
+  const onlyB=Object.keys(cb).filter(k=>!ca[k]).map(k=>T(k).name+'×'+cb[k]);
+  const shared=ids.filter(k=>ca[k]&&cb[k]).map(k=>T(k).name+'×'+Math.min(ca[k],cb[k]));
+  items=keep;
+  let h='<table><tr><th>对比项</th><th>方案 A</th><th>方案 B</th></tr>';
+  h+='<tr><td>模块件数</td><td class="a">'+schemes.A.length+'</td><td class="b">'+schemes.B.length+'</td></tr>';
+  A.d.forEach((v,i)=>{h+='<tr><td>'+v[0]+'</td><td class="a">'+v[1]+'</td><td class="b">'+B.d[i][1]+'</td></tr>'});
+  h+='<tr><td><b>总分</b></td><td class="a"><b>'+A.total+'</b></td><td class="b"><b>'+B.total+'</b></td></tr>';
+  const pa=chkParts(aA),pb=chkParts(aB);
+  CHK_NAMES.forEach((n,i)=>{h+='<tr><td>'+n+'</td><td class="a">'+pa[i]+'</td><td class="b">'+pb[i]+'</td></tr>'});
+  const dif=ids.filter(k=>(ca[k]||0)!==(cb[k]||0)).map(k=>T(k).name+'：A '+(ca[k]||0)+' / B '+(cb[k]||0));
+  h+='<tr><td>布局差异</td><td class="a" colspan="2">'+(dif.length?dif.join('；'):'两方案模块构成相同')+'</td></tr>';
+  h+='<tr><td>仅 A 有</td><td class="a" colspan="2">'+(only.length?only.join('、'):'—')+'</td></tr>';
+  h+='<tr><td>仅 B 有</td><td class="a" colspan="2">'+(onlyB.length?onlyB.join('、'):'—')+'</td></tr>';
+  h+='<tr><td>共有</td><td class="a" colspan="2">'+(shared.length?shared.join('、'):'—')+'</td></tr>';
+  h+='</table>';
+  $('cmp').innerHTML=h;
+}
+$('saveA').onclick=()=>save('A');$('saveB').onclick=()=>save('B');
+$('loadA').onclick=()=>load('A');$('loadB').onclick=()=>load('B');
+$('doCmp').onclick=compare;
+// 载入示例方案：一键布置完整布局，检查与评分立即出结果
+$('loadDemo').onclick=()=>{
+  items=DEMO.map(o=>({id:nextId++,type:o[0],x:o[1],y:o[2],rot:o[3]}));
+  curId=null;activeTag='示例方案';say('已载入示例方案（10 件模块：围合 ×2 组、座椅 ×2、灯台 ×2、绿植、矮柜 ×2、门帘）。',false);render();
+};
+// 清空：从空白方案开始自行排布
+$('clearAll').onclick=()=>{
+  items=[];curId=null;activeTag='空白';say('已清空，可从模块库点选后点击网格自行排布。',false);render();
+};
+$('reset').onclick=()=>{
+  items=INIT.map(o=>({id:nextId++,type:o[0],x:o[1],y:o[2],rot:o[3]}));
+  curId=null;activeTag='初始布局';say('已恢复初始布局。',false);render();
+};
+
+/* ============ 10. 导出 ============ */
+function download(name,blob){
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function checkLines(a){
+  return [
+    '入口净宽 1.0 m：'+(a.door.ok?'通畅':'占用 '+a.door.bad.length+' 格'),
+    '1 m 通行带：'+(a.lane.ok?'全程通畅':'占用 '+a.lane.n+' 格'),
+    '轮椅回转 1.5 m：'+(a.turn.ok?'有（'+M(a.turn.x)+','+M(a.turn.y)+' m）':'无'),
+    '座椅可达：'+(a.seats.length?a.reachCount+'/'+a.seats.length+' 座':'未布置座椅'),
+    '绿植/灯具遮挡：'+(a.circ.length?a.circ.join('、'):'无'),
+    '屏风围合度：'+Math.round(a.enc*100)+'%'
+  ];
+}
+// 检查项的简短结果，用于对比表
+const CHK_NAMES=['入口净宽 1.0 m','1 m 通行带','回转 1.5 m','座位可达','遮挡动线','围合度'];
+function chkParts(a){
+  return [
+    a.door.ok?'通畅':'占用 '+a.door.bad.length+' 格',
+    a.lane.ok?'通畅':'占用 '+a.lane.n+' 格',
+    a.turn.ok?'有':'无',
+    a.seats.length?a.reachCount+'/'+a.seats.length+' 座':'无座椅',
+    a.circ.length?a.circ.length+' 处':'无',
+    Math.round(a.enc*100)+'%'
+  ];
+}
+function listLines(){
+  const byType=[];
+  TYPES.forEach(t=>{
+    const l=items.filter(it=>it.type===t.id);
+    if(!l.length)return;
+    byType.push(l.length+' 件 · '+t.name+' · '+t.size+' · 位置 '+l.map(it=>'('+M(it.x)+','+M(it.y)+')').join(' '));
+  });
+  return byType;
+}
+// 拼装 SVG 平面图（含尺寸标注、指北、比例尺、清单与结论）
+function buildSVG(){
+  const S=60,W=CW*S,H=RH*S,MG=70,VW=W+MG*2;
+  const list=listLines(), chk=checkLines(last.a);
+  const rows=Math.max(list.length,chk.length,1), PAD=200+rows*15, VH=MG+H+PAD;
+  const a=last.a,sc=last.sc,g=[];
+  g.push('<rect width="'+VW+'" height="'+VH+'" fill="#f7f6ef"/>');
+  g.push('<rect x="'+MG+'" y="'+MG+'" width="'+W+'" height="'+H+'" fill="#eceee2" stroke="#5c6f5e" stroke-width="9"/>');
+  for(let i=1;i<CW;i++)g.push('<line x1="'+(MG+i*S)+'" y1="'+MG+'" x2="'+(MG+i*S)+'" y2="'+(MG+H)+'" stroke="#c9cabb" stroke-width="'+(i%2?0.6:1)+'"/>');
+  for(let j=1;j<RH;j++)g.push('<line x1="'+MG+'" y1="'+(MG+j*S)+'" x2="'+(MG+W)+'" y2="'+(MG+j*S)+'" stroke="#c9cabb" stroke-width="'+(j%2?0.6:1)+'"/>');
+  g.push('<rect x="'+(MG+4*S)+'" y="'+MG+'" width="'+(2*S)+'" height="'+H+'" fill="#cfe6cd" fill-opacity=".8"/>');
+  if(a.turn.ok)g.push('<circle cx="'+(MG+(a.turn.x+1.5)*S)+'" cy="'+(MG+(a.turn.y+1.5)*S)+'" r="'+(1.5*S)+'" fill="none" stroke="#4f7fa8" stroke-width="2" stroke-dasharray="8 6"/><text x="'+(MG+(a.turn.x+1.5)*S)+'" y="'+(MG+(a.turn.y+1.5)*S+4)+'" font-size="11" fill="#3c6c93" text-anchor="middle">回转 1.5 m</text>');
+  // 家具
+  items.forEach((it,i)=>{
+    const X=MG+it.x*S,Y=MG+it.y*S;
+    g.push('<g transform="translate('+X+' '+Y+') scale(1.2)">'+shapeSVG(it.type,it.rot)+'</g>');
+    g.push('<text x="'+(X+4)+'" y="'+(Y+16)+'" font-size="10" fill="#3c443d">'+(i+1)+' '+T(it.type).name+'</text>');
+  });
+  // 入口到座位路线
+  const rs=[];
+  a.seats.forEach(s=>{const it=items.find(v=>v.id===s.id);if(s.reach){const r=bfs({x:4,y:1},ringOf(it),a.blocked);if(r)rs.push(r)}});
+  rs.forEach(r=>{g.push('<polyline points="'+r.map(p=>(MG+p.x*S+S/2)+','+(MG+p.y*S+S/2)).join(' ')+'" fill="none" stroke="#3f6ea8" stroke-width="3.5" stroke-dasharray="9 6"/>')});
+  // 门：抹掉墙段 + 开启弧线
+  const d1=MG+4*S,d2=MG+6*S;
+  g.push('<rect x="'+d1+'" y="'+(MG-6)+'" width="'+(2*S)+'" height="12" fill="#f7f6ef"/>');
+  g.push('<path d="M'+d1+' '+MG+' L'+d1+' '+(MG-2*S)+' A'+(2*S)+' '+(2*S)+' 0 0 1 '+d2+' '+MG+'" fill="none" stroke="#8a7a4e" stroke-width="2"/>');
+  g.push('<text x="'+(d1+4)+'" y="'+(MG-8)+'" font-size="11" fill="#7a6a3c">入口 1.0 m</text>');
+  // 尺寸标注
+  g.push('<line x1="'+MG+'" y1="'+(MG-32)+'" x2="'+(MG+W)+'" y2="'+(MG-32)+'" stroke="#4a5148" stroke-width="1.2"/>');
+  g.push('<line x1="'+MG+'" y1="'+(MG-37)+'" x2="'+MG+'" y2="'+(MG-27)+'" stroke="#4a5148" stroke-width="1.2"/><line x1="'+(MG+W)+'" y1="'+(MG-37)+'" x2="'+(MG+W)+'" y2="'+(MG-27)+'" stroke="#4a5148" stroke-width="1.2"/>');
+  g.push('<text x="'+(MG+W/2)+'" y="'+(MG-38)+'" font-size="12" fill="#4a5148" text-anchor="middle">5.00 m</text>');
+  g.push('<line x1="'+(MG-32)+'" y1="'+MG+'" x2="'+(MG-32)+'" y2="'+(MG+H)+'" stroke="#4a5148" stroke-width="1.2"/>');
+  g.push('<line x1="'+(MG-37)+'" y1="'+MG+'" x2="'+(MG-27)+'" y2="'+MG+'" stroke="#4a5148" stroke-width="1.2"/><line x1="'+(MG-37)+'" y1="'+(MG+H)+'" x2="'+(MG-27)+'" y2="'+(MG+H)+'" stroke="#4a5148" stroke-width="1.2"/>');
+  g.push('<text transform="translate('+(MG-38)+' '+(MG+H/2)+') rotate(-90)" font-size="12" fill="#4a5148" text-anchor="middle">6.00 m</text>');
+  // 指北针
+  g.push('<g transform="translate('+(MG+W+38)+' '+(MG+30)+')"><circle r="17" fill="#fdfcf6" stroke="#6b7568" stroke-width="1.5"/><path d="M0 -13 L6 12 L0 7 L-6 12 Z" fill="#5c685d"/><text y="-4" font-size="9" fill="#5c685d" text-anchor="middle">N</text></g>');
+  // 比例尺
+  const sb=MG,sy=MG+H+38;
+  for(let i=0;i<4;i++)g.push('<rect x="'+(sb+i*S)+'" y="'+sy+'" width="'+S+'" height="9" fill="'+(i%2?'#5c685d':'#fdfcf6')+'" stroke="#5c685d" stroke-width="1"/>');
+  ['0','1','2 m'].forEach((t,i)=>g.push('<text x="'+(sb+i*2*S)+'" y="'+(sy+24)+'" font-size="10" fill="#5c685d" text-anchor="middle">'+t+'</text>'));
+  // 标题栏：清单 / 检查结论 / 评分 / 声明
+  const ty=MG+H+92, cx2=MG+370, STEP=15, bottom=ty+42+rows*STEP;
+  g.push('<line x1="'+MG+'" y1="'+(ty-30)+'" x2="'+(MG+W)+'" y2="'+(ty-30)+'" stroke="#c0c2b1" stroke-width="1"/>');
+  g.push('<text x="'+MG+'" y="'+ty+'" font-size="19" font-weight="bold" fill="#2f3a32">一平米静音站 · 校园微型安静角</text>');
+  g.push('<text x="'+MG+'" y="'+(ty+17)+'" font-size="11" fill="#5c685d">概念平面方案图 · 5.00 m × 6.00 m · 0.5 m 网格 · 1 ㎡ 模块 · 图面向上为示意北向 · '+activeTag+'</text>');
+  let ly=ty+42;
+  g.push('<text x="'+MG+'" y="'+ly+'" font-size="12" font-weight="bold" fill="#3f4f43">模块清单（'+items.length+' 件 / '+items.length.toFixed(1)+' ㎡）</text>');
+  list.forEach(t=>{ly+=STEP;g.push('<text x="'+MG+'" y="'+ly+'" font-size="11" fill="#3f4740">· '+t+'</text>')});
+  let ry=ty+42;
+  g.push('<text x="'+cx2+'" y="'+ry+'" font-size="12" font-weight="bold" fill="#3f4f43">检查结论（概念自查）</text>');
+  chk.forEach(t=>{ry+=STEP;g.push('<text x="'+cx2+'" y="'+ry+'" font-size="11" fill="#3f4740">· '+t+'</text>')});
+  g.push('<text x="'+MG+'" y="'+(bottom+28)+'" font-size="12" font-weight="bold" fill="#3f4f43">评分 '+sc.total+' / 100 · '+sc.grade+'（'+sc.d.map(v=>v[0]+' '+v[1]+'/'+v[2]).join(' · ')+'）</text>');
+  g.push('<text x="'+MG+'" y="'+(bottom+50)+'" font-size="10" fill="#6b7568">本图为概念规划示意，不含结构、机电、消防疏散与声学指标；无障碍与消防须按现场与现行规范另行复核。生成于 '+new Date().toISOString().slice(0,10)+'</text>');
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="'+VW+'" height="'+VH+'" viewBox="0 0 '+VW+' '+VH+'" font-family="\'Microsoft YaHei\',\'Segoe UI\',sans-serif">'+g.join('')+'</svg>';
+}
+$('expSvg').onclick=()=>{
+  const svg=buildSVG();
+  download('quiet-corner-plan.svg',new Blob([svg],{type:'image/svg+xml;charset=utf-8'}));
+  say('SVG 已导出：含尺寸标注、指北针、比例尺、模块清单与检查结论。',false);
+};
+$('expPng').onclick=()=>{
+  const svg=buildSVG();
+  const url='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  const img=new Image();
+  img.onload=()=>{
+    try{
+      const c=document.createElement('canvas');
+      c.width=1480;c.height=Math.round(1480*img.height/img.width);
+      const x=c.getContext('2d');
+      x.fillStyle='#ffffff';x.fillRect(0,0,c.width,c.height);
+      x.drawImage(img,0,0,c.width,c.height);
+      c.toBlob(b=>{b?download('quiet-corner-plan.png',b):say('PNG 生成失败，请改用 SVG 导出。',true)},'image/png');
+      say('PNG 已导出（宽度 1480 px）。',false);
+    }catch(err){say('浏览器阻止了画布导出，请改用 SVG 导出。',true)}
+  };
+  img.onerror=()=>say('图片渲染失败，请改用 SVG 导出。',true);
+  img.src=url;
+};
+$('expJson').onclick=()=>{
+  const a=last.a,sc=last.sc;
+  const data={
+    tool:'一平米静音站 · 概念规划工具',
+    note:'概念方案数据，非施工图；不含任何现场实测与规范审查结论',
+    room:{width_m:5,depth_m:6,grid_m:CS,entrance:'北侧 1.0 m 概念入口',orientation:'图面向上为示意北向'},
+    layout_tag:activeTag,
+    items:items.map(it=>({id:it.id,type:it.type,name:T(it.type).name,size_m:T(it.type).size,
+      grid:{x:it.x,y:it.y},pos_m:[+M(it.x),+M(it.y)],rot90:it.rot,walkable:T(it.type).walk})),
+    checks:{entrance_clear:a.door.ok,lane_1m_clear:a.lane.ok,turning_1p5m:a.turn.ok,
+      seats:a.seats.length,seats_reachable:a.reachCount,obstacles_on_lane:a.lane.n,
+      plant_lamp_on_circulation:a.circ,enclosure:Math.round(a.enc*100)},
+    score:{total:sc.total,dimensions:sc.d.map(v=>({name:v[0],value:v[1],max:v[2],rule:v[3]}))}
+  };
+  download('quiet-corner-plan.json',new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  say('方案 JSON 已导出。',false);
+};
+
+/* ============ 11. 作品说明抽屉 ============ */
+let lastFocus=null;
+function openDrawer(){
+  lastFocus=document.activeElement;
+  $('drawer').classList.add('on');$('drawer').setAttribute('aria-hidden','false');
+  $('mask').hidden=false;requestAnimationFrame(()=>$('mask').classList.add('on'));
+  $('btnInfo').setAttribute('aria-expanded','true');
+  requestAnimationFrame(()=>$('btnClose').focus());   // 等抽屉可见后再移动焦点
+}
+function closeDrawer(){
+  $('drawer').classList.remove('on');$('drawer').setAttribute('aria-hidden','true');
+  $('mask').classList.remove('on');setTimeout(()=>{$('mask').hidden=true},220);
+  $('btnInfo').setAttribute('aria-expanded','false');
+  if(lastFocus)lastFocus.focus();
+}
+$('btnInfo').onclick=openDrawer;
+$('btnClose').onclick=closeDrawer;
+$('mask').onclick=closeDrawer;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('drawer').classList.contains('on'))closeDrawer()});
+
+/* ============ 12. 初始化 ============ */
+drawNorth();buildCells();buildMods();buildLegend();
+items=INIT.map(o=>({id:nextId++,type:o[0],x:o[1],y:o[2],rot:o[3]}));
+render();
+</script>
+</body>
+</html>
